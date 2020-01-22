@@ -1,0 +1,7 @@
+domain: kubeflow.org
+repo: github.com/CiscoAI/kf-cluster-api
+resources:
+- group: cluster
+  kind: KfCluster
+  version: v1alpha1
+version: "2"

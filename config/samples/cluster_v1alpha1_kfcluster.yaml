@@ -1,0 +1,7 @@
+apiVersion: cluster.kubeflow.org/v1alpha1
+kind: KfCluster
+metadata:
+  name: kfcluster-sample
+spec:
+  # Add fields here
+  foo: bar
