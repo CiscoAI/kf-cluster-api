@@ -1,0 +1,12 @@
+apiVersion: cluster.kubeflow.org/v1alpha1
+kind: KfCluster
+metadata:
+  name: kf-github-action-gcp
+spec:
+  kf_config: "https://raw.githubusercontent.com/kubeflow/kubeflow/master/bootstrap/config/kfctl_k8s_istio.yaml"
+  version: "latest"
+  build_kfctl: false
+  platform: "gcp"
+  clusterprovider:
+    gcp:
+      zone: us-central1-a

@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= kf-cluster-controller:latest
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true"
 
@@ -12,6 +12,11 @@ GOBIN=$(shell go env GOBIN)
 endif
 
 all: manager
+
+cli:
+	GO111MODULE=on go mod download
+	GO111MODULE=on GOOS=darwin GOARCH=amd64 go build -o bin/macos/kf-clusterctl cmd/kf-clusterctl/kf-clusterctl.go
+	GO111MODULE=on GOOS=linux GOARCH=amd64 go build -o bin/linux/kf-clusterctl cmd/kf-clusterctl/kf-clusterctl.go
 
 # Run tests
 test: generate fmt vet manifests

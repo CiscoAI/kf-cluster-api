@@ -19,22 +19,36 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// IMPORTANT
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+
+// KfPlatform defines the platform for bootstrapping a KfCluster
+type KfPlatform string
+
+// KfClusterFinalizer - finalizer for all resources created by the KfCluster CRD
+const (
+	KfClusterFinalizer            = "kfcluster.kubeflow.org"
+	KfGcp              KfPlatform = "gcp"
+	KfMetal            KfPlatform = "metal"
+)
 
 // KfClusterSpec defines the desired state of KfCluster
 type KfClusterSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
-	ClusterProvider KfClusterProvider `json:"clusterprovider,omitempty"`
+	Platform        KfPlatform        `json:"platform,omitempty"`
+	Namespace       string            `json:"namespace,omitempty"`
 	KfConfig        string            `json:"kf_config,omitempty"`
 	Version         string            `json:"version,omitempty"`
 	BuildKfctl      bool              `json:"build_kfctl,omitempty"`
+	ClusterProvider KfClusterProvider `json:"clusterprovider,omitempty"`
+	Secrets         []string          `json:"secrets,omitempty"`
 }
 
 // KfClusterProvider defines the desired cluster provider from where we source the Kubernetes nodes
 type KfClusterProvider struct {
 	// Important: Run "make" to regenerate code after modifying this file
-	Existing ExistingK8s `json:"existing,omitempty"`
-	Gce      GCE         `json:"gce,omitempty"`
+	Generic Generic `json:"generic,omitempty"`
+	Gcp     GCP     `json:"gcp,omitempty"`
 }
 
 // KfClusterStatus defines the observed state of KfCluster

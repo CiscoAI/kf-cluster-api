@@ -15,16 +15,18 @@ limitations under the License.
 
 package v1alpha1
 
-// ExistingK8s defines an existing k8s cluster on which we install Kubeflow
-type ExistingK8s struct {
-	Kubeconfig string `json:"kubeconfig,omitempty"`
+// Generic - a k8s cluster on which we install Kubeflow
+type Generic struct {
 }
 
-// Kind defines a Kubernetes-in-Docker cluster upon which we bootstrap Kubeflow
-type Kind struct {
-	Kubeconfig string `json:"kubeconfig,omitempty"`
+// GCP - Google Compute Engine provider to provision VMs for nodes
+type GCP struct {
+	ApplicationCredentials string `json:"application_credentials,omitempty"`
+	Zone                   string `json:"zone,omitempty"`
+	Project                string `json:"project,omitempty"`
 }
 
-// GCE is the Google Compute Engine provider to provision VMs for nodes
-type GCE struct {
+// CCP - Cisco Container Platformn provider to provision a k8s cluster
+type CCP struct {
+	// TODO(swiftdiaries): implement workflow for CCP
 }
