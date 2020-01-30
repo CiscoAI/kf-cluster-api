@@ -50,6 +50,7 @@ func (r *KfCluster) Default() {
 var _ webhook.Validator = &KfCluster{}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
+// Validation loop should check if the cluster has the neccesary resources for fulfilling a Kuebflow installation
 func (r *KfCluster) ValidateCreate() error {
 	kfclusterlog.Info("validate create", "name", r.Name)
 	if r.Spec.Platform == "gcp" || r.Spec.Platform == "generic" {

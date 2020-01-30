@@ -13,6 +13,7 @@ RUN go mod vendor
 # Copy the go source
 COPY main.go main.go
 COPY api/ api/
+COPY pkg/ pkg/
 COPY controllers/ controllers/
 
 # Build

@@ -1,6 +1,8 @@
-
+# Version
+VERSION ?= v0.1.0
 # Image URL to use all building/pushing image targets
-IMG ?= kf-cluster-controller:latest
+IMG ?= ciscoai/kf-cluster-controller:$(VERSION)
+CLI_IMG ?= ciscoai/kf-clusterctl:$(VERSION)
 # Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
 CRD_OPTIONS ?= "crd:trivialVersions=true"
 
@@ -17,6 +19,12 @@ cli:
 	GO111MODULE=on go mod download
 	GO111MODULE=on GOOS=darwin GOARCH=amd64 go build -o bin/macos/kf-clusterctl cmd/kf-clusterctl/kf-clusterctl.go
 	GO111MODULE=on GOOS=linux GOARCH=amd64 go build -o bin/linux/kf-clusterctl cmd/kf-clusterctl/kf-clusterctl.go
+
+docker-build-cli:
+	docker build -f cmd/kf-clusterctl/Dockerfile -t $(CLI_IMG) .
+
+docker-push-cli:
+	docker push $(CLI_IMG)
 
 # Run tests
 test: generate fmt vet manifests
@@ -60,7 +68,7 @@ generate: controller-gen
 	$(CONTROLLER_GEN) object:headerFile=./hack/boilerplate.go.txt paths="./..."
 
 # Build the docker image
-docker-build: test
+docker-build:
 	docker build . -t ${IMG}
 
 # Push the docker image

@@ -49,9 +49,7 @@ func main() {
 		"Enable leader election for controller manager. Enabling this will ensure there is only one active controller manager.")
 	flag.Parse()
 
-	ctrl.SetLogger(zap.New(func(o *zap.Options) {
-		o.Development = true
-	}))
+	ctrl.SetLogger(zap.Logger(true))
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
@@ -72,11 +70,13 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "KfCluster")
 		os.Exit(1)
 	}
-	if err = (&clusterv1alpha1.KfCluster{}).SetupWebhookWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create webhook", "webhook", "KfCluster")
-		os.Exit(1)
-	}
 
+	if os.Getenv("ENABLE_WEBHOOKS") != "false" {
+		if err = (&clusterv1alpha1.KfCluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "KfCluster")
+			os.Exit(1)
+		}
+	}
 	// +kubebuilder:scaffold:builder
 
 	setupLog.Info("starting manager")

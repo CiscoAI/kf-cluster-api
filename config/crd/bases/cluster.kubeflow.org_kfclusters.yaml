@@ -22,43 +22,25 @@ spec:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
             of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
           type: string
         kind:
           description: 'Kind is a string value representing the REST resource this
             object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
           type: string
         metadata:
           type: object
         spec:
           description: KfClusterSpec defines the desired state of KfCluster
           properties:
-            build_kfctl:
-              type: boolean
-            clusterprovider:
-              description: KfClusterProvider defines the desired cluster provider
-                from where we source the Kubernetes nodes
-              properties:
-                gcp:
-                  description: GCP - Google Compute Engine provider to provision VMs
-                    for nodes
-                  properties:
-                    application_credentials:
-                      type: string
-                    project:
-                      type: string
-                    zone:
-                      type: string
-                  type: object
-                generic:
-                  description: 'Important: Run "make" to regenerate code after modifying
-                    this file'
-                  type: object
-              type: object
-            kf_config:
+            apps:
+              items:
+                type: string
+              type: array
+            config_map_name:
               type: string
-            namespace:
+            kf_version:
               type: string
             platform:
               description: 'Important: Run "make" to regenerate code after modifying
@@ -68,11 +50,25 @@ spec:
               items:
                 type: string
               type: array
-            version:
-              type: string
           type: object
         status:
           description: KfClusterStatus defines the observed state of KfCluster
+          properties:
+            conditions:
+              items:
+                description: KfClusterCondition defines the possible states for the
+                  KfCluster
+                properties:
+                  ready:
+                    type: boolean
+                  state:
+                    description: 'Important: Run "make" to regenerate code after modifying
+                      this file'
+                    type: string
+                type: object
+              type: array
+            kubeconfig_path:
+              type: string
           type: object
       type: object
   version: v1alpha1

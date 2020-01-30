@@ -16,6 +16,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -29,31 +30,30 @@ type KfPlatform string
 const (
 	KfClusterFinalizer            = "kfcluster.kubeflow.org"
 	KfGcp              KfPlatform = "gcp"
-	KfMetal            KfPlatform = "metal"
+	KfGeneric          KfPlatform = "generic"
 )
 
 // KfClusterSpec defines the desired state of KfCluster
 type KfClusterSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
-	Platform        KfPlatform        `json:"platform,omitempty"`
-	Namespace       string            `json:"namespace,omitempty"`
-	KfConfig        string            `json:"kf_config,omitempty"`
-	Version         string            `json:"version,omitempty"`
-	BuildKfctl      bool              `json:"build_kfctl,omitempty"`
-	ClusterProvider KfClusterProvider `json:"clusterprovider,omitempty"`
-	Secrets         []string          `json:"secrets,omitempty"`
-}
-
-// KfClusterProvider defines the desired cluster provider from where we source the Kubernetes nodes
-type KfClusterProvider struct {
-	// Important: Run "make" to regenerate code after modifying this file
-	Generic Generic `json:"generic,omitempty"`
-	Gcp     GCP     `json:"gcp,omitempty"`
+	Platform      KfPlatform `json:"platform,omitempty"`
+	KfVersion     string     `json:"kf_version,omitempty"`
+	ConfigMapName string     `json:"config_map_name,omitempty"`
+	Apps          []string   `json:"apps,omitempty"`
+	Secrets       []string   `json:"secrets,omitempty"`
 }
 
 // KfClusterStatus defines the observed state of KfCluster
 type KfClusterStatus struct {
+	Conditions     []KfClusterCondition `json:"conditions,omitempty"`
+	KubeconfigPath string               `json:"kubeconfig_path,omitempty"`
+}
+
+// KfClusterCondition defines the possible states for the KfCluster
+type KfClusterCondition struct {
 	// Important: Run "make" to regenerate code after modifying this file
+	State *appsv1.DeploymentConditionType `json:"state,omitempty"`
+	Ready bool                            `json:"ready,omitempty"`
 }
 
 // +kubebuilder:object:root=true

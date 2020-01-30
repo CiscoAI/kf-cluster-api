@@ -1,0 +1,7 @@
+apiVersion: cluster.kubeflow.org/v1alpha1
+kind: KfCluster
+metadata:
+  name: kfcluster-generic
+spec:
+  kfctl_version: latest
+  platform: generic
